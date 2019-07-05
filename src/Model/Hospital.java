@@ -24,10 +24,12 @@ public class Hospital {
         bookedResidents = new ArrayList<>();
     }
 
+    // EFFECTS: Returns true if there are no more slots for additional residents
     public Boolean isFull() {
         return bookedResidents.size() >= slots;
     }
 
+    // EFFECTS: Returns the lowest preference resident that is currently booked
     public Resident getLowestResident() {
         if (bookedResidents.size() > 0) {
             return bookedResidents.get(bookedResidents.size() - 1);
@@ -35,6 +37,8 @@ public class Hospital {
         return null;
     }
 
+    // MODIFIES: this
+    // EFFECTS: Adds a resident to bookedResidents if not full maintaining preference order
     public void addResident(Resident r) {
         if (bookedResidents.size() == 0 && slots > 0) {
             bookedResidents.add(r);
@@ -55,17 +59,22 @@ public class Hospital {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: removes r from bookedResidents
     public void removeResident(Resident r) {
         bookedResidents.remove(r);
     }
 
+    // MODIFIES: this
+    // EFFECTS: removes lowest preference residence from bookedResidents
     public void removeLowestResident() {
         if (bookedResidents.size() != 0) {
             bookedResidents.remove(bookedResidents.size() - 1);
         }
     }
 
-    //REQUIRES: bookedResidents.size() != 0
+    // REQUIRES: bookedResidents.size() != 0
+    // EFFECTS: Returns true if this prefers r over its lowest preferred resident
     public Boolean prefers(Resident r) {
         for (Resident resident : preferenceList) {
             if (resident == r) {

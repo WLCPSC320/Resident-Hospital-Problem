@@ -62,6 +62,17 @@ public class RHP {
                 retval.add(temp);
             }
         }
+        for (Resident resident : residentList) {
+            ArrayList<Hospital> temp = new ArrayList<>();
+            for (Hospital pHospital : resident.getPreferenceList()) {
+                for (Hospital hospital : retval) {
+                    if (hospital.getParent() == pHospital) {
+                        temp.add(hospital);
+                    }
+                }
+            }
+            resident.setPreferenceList(temp);
+        }
         return retval;
     }
 
@@ -104,7 +115,23 @@ public class RHP {
     private void smpToRHP() {
         for (Resident r : residentList) {
             r.setHospital(r.getHospital().getParent());
+            ArrayList<Hospital> temp = new ArrayList<>();
+            for (Hospital hospital : r.getPreferenceList()) {
+                if (!isParentAdded(temp, hospital.getParent())) {
+                    temp.add(hospital.getParent());
+                }
+            }
+            r.setPreferenceList(temp);
         }
+    }
+
+    private Boolean isParentAdded(ArrayList<Hospital> added, Hospital h) {
+        for (Hospital hospital : added) {
+            if (hospital == h) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private HashSet<Pair<Resident,Hospital>> generateMatches() {
